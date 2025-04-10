@@ -1,0 +1,24 @@
+<div class='col-sm-12 col-md-5' id='on_<%= name %>'>
+  <legend><small> On <%= name %>: <%= dependencies.count %></small></legend>
+  <table class='table'>
+    <thead>
+      <th>Draft</th>
+      <th>Name</th>
+      <th>Type</th>
+    </thead>
+      <% dependencies.each do |draft| %>
+        <% item = draft.reify %>
+        <tr>
+          <td>
+            <%= link_to draft_path(draft) do %>
+              <span class='<%= draft.event %>-tag'>
+                <%= draft.create? ? "New" : draft.destroy? ? "Delete" : "Update"  %>
+              </span>
+            <% end %>
+          </td>
+          <td><%= item.display_name %></td>
+          <td><%= draft.item.class.model_name.human  %></td>
+        </tr>
+      <% end %>
+  </table>
+</div>

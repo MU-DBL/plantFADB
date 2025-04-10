@@ -1,0 +1,58 @@
+
+<% content_for :top_bar do %>
+<div class='row'>
+	<div class='col-md-12'>
+		<p><b>
+			<% if @selected %>
+				Showing the maximum wt% across all publications for FA: <%= link_to @selected.display_name, @selected %> <br/>
+			<% elsif !params[:category].blank? %>
+				Showing maximum wt% for all FA in category: <%= link_to params[:category], fatty_acids_path(category: params[:category]) %>
+			<% else %>
+			  Showing the number of datapoints across all publications for a phylogenetic class. <br/>
+				Select an option from boxes below to display maximum wt% of a FA, or FA within a structural group.<br/>
+			<% end %>
+		</b></p>
+		<p>Click on a node to expand or contract phylogenetic level. ( Open circles on leaf nodes indicate no data available )</p>
+	</div>
+</div>
+<% end %>
+
+<div class='row'>
+	<div class='col-md-12'>
+		<div class='pull-left' style='margin:1em;margin-top:1.5em'>Filter by:</div>
+			<div class="dropdown pull-left"  style='margin:1em'>
+			  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownCategory" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+			    Category
+			    <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="dropdownCategory">
+					<% @categories.each do |cat| %>
+						<li><%= link_to cat, tree_index_path(category: cat) %></li>
+					<% end %>
+			  </ul>
+			</div>
+			<div class="dropdown pull-left"  style='margin:1em'>
+			  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMolecule" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+			    Example molecules
+			    <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="dropdownMolecule">
+					<% @fatty_acids.each do |fa| %>
+						<li><%= link_to fa.display_html.html_safe, tree_index_path(measure_id: fa.id) %></li>
+					<% end %>
+			  </ul>
+				<small>
+					select others from <%= link_to "Fatty Acid", fatty_acids_path %> listing
+				</samll>
+			</div>
+	</div>
+</div>
+
+<span id='loading-indicator' class="glyphicon glyphicon-refresh gly-spin"></span> 
+<div id='tree' class='well' style="width:100%;padding:0;position:relative;display:none">
+	<div style='position:absolute;top:5px;left:5px'>
+		<button submit='button' class='btn btn-default' onclick='tree.resetNodes();$(this).blur()'>Reset</button>
+	</div>
+	
+</div>
+<%= render partial: 'tree', locals: {measure_id: params[:measure_id], category: params[:category], value_method: @value_method}%>

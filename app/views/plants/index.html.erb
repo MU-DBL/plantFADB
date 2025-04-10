@@ -1,0 +1,20 @@
+<% content_for :title do -%>
+ PlantFAdb: Plants
+<% end -%>
+
+<% content_for :description do -%>
+  Fatty acid analysis for more than 7000 plant species including fatty acid composition, oil content, links to publications and individual data sets.
+<% end -%>
+
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Plants</h1>
+  <span class='small'><sup>1</sup>
+    Multiple entries with the same Genus species represent different data sources.  Plant names will be consolidated in a future update of PlantFAdb.
+  </span>
+<% end %>
+
+<% content_for :item_bar do %>
+    <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
+<% end %>
+	
+<%= render 'listing', plants: @plants %>

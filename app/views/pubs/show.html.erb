@@ -1,0 +1,131 @@
+<% content_for :title do -%>
+  PlantFAdb: <%= "#{@pub.wos_title}." if @pub.wos_title && @pub.wos_title.downcase != 'none' %> <%= @pub.display_name %>
+<% end -%>
+
+<% content_for :description do -%>
+  Information on over 1500 publications on plant fatty acids with links to species analyzed, analytical data, and full text of publications. <%= "#{@pub.wos_title}." if @pub.wos_title && @pub.wos_title.downcase != 'none' %> <%= @pub.display_name %>
+<% end -%>
+
+<% content_for :top_bar do %>
+  <% unless @pub.published? %>
+    <p class='bg-warning'>This is an unpublished draft. <%= link_to 'Click here to view all draft data', drafts_path %></p>
+  <% end %>
+  <h1 class="pagetitle"><%= @pub.wos_title %></h1>
+<% end %>
+
+<% content_for :item_bar do %>
+  <%= link_to 'Back', pubs_path, class: 'btn btn-primary' %>
+  <% if can? :edit, @pub %>
+    <%= link_to 'Edit', edit_pub_path(@pub), class: 'btn btn-primary' %>
+    <%= link_to "Add Plant", new_plants_pub_path(pub_id: @pub.id), class: 'btn btn-primary' %>
+  <% end %>
+<% end %>
+
+<% if @pub.abstract %>
+  <div class='row'>
+    <div class='well col-md-12'>
+      <legend>Abstract</legend>
+      <%= @pub.abstract %>
+    </div>
+  </div>
+<% end %>
+
+<div class='row'>
+  <div class='well col-sm-12 col-md-5' style='overflow:auto'>
+    <legend>Citation</legend>
+    <p>
+      <strong>Authors:</strong>
+      <%= @pub.wos_authors %>
+    </p>
+
+    <p>
+      <strong>Journal:</strong>
+      <%= @pub.wos_journal %>
+    </p>
+
+    <p>
+      <strong>Year:</strong>
+      <%= @pub.wos_year %>
+    </p>
+
+    <p>
+      <strong>Volume:</strong>
+      <%= @pub.wos_volume %>
+    </p>
+
+    <p>
+      <strong>Page:</strong>
+      <%= @pub.wos_pages %>
+    </p>
+
+    <p>
+      <strong>UID:</strong>
+      <%= @pub.wos_uid %>
+    </p>
+
+    <% if @pub.url %>
+      <p>
+        <strong>URL:</strong>
+        <%= link_to @pub.url, @pub.url, target: '_blank'%>
+      </p>
+    <% end %>
+
+    <% unless @pub.doi.blank? || @pub.doi.downcase == 'none' %>
+      <p>
+        <strong>DOI:</strong>
+        <%= link_to @pub.doi, "https://doi.org/#{@pub.doi}", target: '_blank'%>
+      </p>
+    <% end %>
+  </div>
+
+  <div class='col-sm-12 col-md-7 well pull-right'>
+    <legend>Plants</legend>
+    <% if @pub.datasets.count > 1 %>
+		<span> 
+			<%= link_to "View All #{@pub.datasets.count} Datasets", datasets_path(pub_id: @pub.id) %>
+		</span>
+    <% end %>
+    <table class="table">
+      <thead>
+      <th>Genus</th>
+      <th>Species</th>
+      <th>Data Points</th>
+      <th></th>
+      <th></th>
+      </thead>
+      <tbody>
+      <% @plants_pubs.each do |pb| %>
+        <tr>
+          <td><%= link_to pb['genus']||"Unknown", datasets_path(plant_id: pb['plant_id'], pub_id: pb['pub_id']) %></td>
+          <td><%= link_to pb['species']||"Unknown", datasets_path(plant_id: pb['plant_id'], pub_id: pb['pub_id']) %></td>
+          <td>
+            <%= pb['count'] %>
+            <% unless pb['remarks'].blank? %>
+              <a class='pull-right glyphicon glyphicon-info-sign' data-toggle='tooltip' data-html='true' title="
+                <%= "#{pb['name']}:<br/> #{pb['remarks']}<br/>" if pb['remarks']  %>
+               "></a>
+            <% end %>
+            <td>
+              <% if can? :edit, pb %>
+                <%= link_to 'Edit', edit_plants_pub_path(pb['id']), class: 'btn btn-warning btn-xs' %>
+              <% end %>
+            </td>
+            </td>
+            </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if @pub.sofa_tabs.present? %>
+    <div class='col-sm-12 col-md-5 pull-left well'>
+      <legend>SOFA Table(s)</legend>
+      <% @pub.sofa_tabs.each do |tab| %>
+        <div style='float:left;margin:0.25em'><%= link_to (tab.sofa_tab_id||'#'), tab.sofa_url, target: '_blank' %></div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+
+

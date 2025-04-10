@@ -1,0 +1,72 @@
+<div class='row'>
+	<div class='col-xs-12 col-sm-7 col-md-8 pull-left'>
+		<ul class="pagination">
+			<%= paginate plants %>
+		</ul>
+	</div>
+	<div class='col-xs-12 col-sm-5 col-md-4 search'>
+    <%= form_tag nil, method: :get do %>
+		<% params.except(:commit,:action,:controller,:utf8,:query,:page).each do |parameter, val| %>
+			<%= hidden_field_tag parameter, val %>
+		<% end %>
+      <div class='form-inline pull-left-sm pull-right-md'>
+				<div class='form-group'>
+          <a href='<%= Page.path('help') %>'class='glyphicon glyphicon-question-sign' data-toggle='tooltip' data-html='true' title="
+            Search includes Order, family, Genus, species, common names and names from the SOFA database.<br/><br/>
+            
+            Click for more details.
+          "></a>
+			    <label for="query">Search:</label>
+					<%= text_field_tag :query, params[:query], class: 'form-control' %>
+					<%= submit_tag "Go", class: "btn btn-info"%>
+				</div>
+			</div>
+    <% end %>
+	</div>
+</div>
+
+<div class='panel table-responsive'>
+	
+	<div class="panel-heading clearfix">
+		<div class='pull-right'><%= page_entries_info plants %></div>
+	</div>
+	
+  <table class='table table-striped'>
+    <thead>
+      <tr>
+        <th><%= sortable('genus','Genus') %></th>
+        <th><%= sortable('species','Species') %></th>
+				<th><%= sortable('variety', 'Variety') %></th>
+				<th><%= sortable('common_name','Common Name') %></th>
+				<th><%= sortable('family','Family') %></th>
+				<th><%= sortable('order_name', 'Order') %></th>
+				<th><%= sortable('avg_oil_content', 'Oil Content') %></th>
+        <th><%= sortable('pub_count','Publications') %></th>
+        <th><%= sortable('result_count','Data points') %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% plants.each do |plant| %>
+        <tr>
+					<td><%= link_to plant.genus||'-', plant %></td>
+					<td><%= link_to plant.species||'-', plant %></td>
+					<td><%= plant.variety %></td>
+					<td><%= plant.common_name %></td>
+					<td><%= plant.family %></td>
+					<td><%= plant.order_name %></td>
+					<td><%= plant.avg_oil_content.try(:round,1) %></td>
+          <td><%= link_to plant.pub_count, pubs_path(plant_id: plant.id) if plant.pub_count %></td>
+          <td><%= link_to plant.result_count, datasets_path(plant_id: plant.id) if plant.result_count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class='row'>
+	<div class='col-xs-12 col-sm-7 col-md-8'>
+		<ul class="pagination pull-left">
+			<%= paginate plants %>
+		</ul>
+	</div>
+</div>

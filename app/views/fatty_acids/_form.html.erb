@@ -1,0 +1,105 @@
+<%= form_for(@fatty_acid) do |f| %>
+  <% if @fatty_acid.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@fatty_acid.errors.count, "error") %> prohibited this fatty_acid from being saved:</h2>
+
+      <ul>
+      <% @fatty_acid.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+	
+	<div class='container'>
+		<div class='row'>
+			<div class='col-md-5'>
+			  <div class="field">
+			    <%= f.label :name %>*<br>
+			    <%= f.text_field :name, class: 'form-control', required: true %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :common_name %><br>
+			    <%= f.text_field :common_name, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :other_names %><br>
+			    <%= f.text_area :other_names, class: 'form-control', rows: 4 %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :formula %>*<br>
+			    <%= f.text_field :formula, class: 'form-control', required: true %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :mass %>*<br>
+			    <%= f.text_field :mass, class: 'form-control', required: true %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :category %><br>
+			    <%= f.text_field :category, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :image_link %> (overrides opsin image)<br>
+			    <%= f.text_field :image_link, class: 'form-control' %>
+			  </div>
+			</div>
+
+			<div class='col-md-2'>
+			  <div class="field">
+			    <%= f.label :cas_number %><br>
+			    <%= f.text_field :cas_number, class: 'form-control' %>
+			  </div>
+	
+			  <div class="field">
+			    <%= f.label :sofa_mol_id %><br>
+			    <%= f.text_field :sofa_mol_id, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :lipidmap_id %><br>
+			    <%= f.text_field :lipidmap_id, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :pubchem_id %><br>
+			    <%= f.text_field :pubchem_id, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :chebi_id %><br>
+			    <%= f.text_field :chebi_id, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :iupac_name, "IUPAC Name" %><br>
+			    <%= f.text_field :iupac_name, class: 'form-control' %>
+			  </div>
+			</div>
+			
+			<div class='col-md-5'>
+			  <div class="field">
+			    <%= f.label :inchi %><br>
+			    <%= f.text_field :inchi, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :stdinchi %><br>
+			    <%= f.text_field :stdinchi, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :stdinchikey %><br>
+			    <%= f.text_field :stdinchikey, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :smiles %><br>
+			    <%= f.text_field :smiles, class: 'form-control' %>
+			  </div>
+			  <div class="field">
+			    <%= f.label :delta_notation %><br>
+			    <%= f.text_field :delta_notation, class: 'form-control' %>
+			  </div>
+			</div>
+		</div>
+	</div>
+	
+	<br/>
+
+  <div class="actions">
+    <%= f.submit class: 'btn btn-primary' %>
+  </div>
+<% end %>

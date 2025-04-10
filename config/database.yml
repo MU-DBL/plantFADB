@@ -1,0 +1,24 @@
+development:
+  adapter: postgresql
+  database: des9oa54lbpnhb
+  username: u5g88u3ou5e3bs
+  password: 123456
+  host: localhost
+  variables:
+    statement_timeout: 5000
+test:
+  adapter: postgresql
+  database: des9oa54lbpnhb
+  username: u5g88u3ou5e3bs
+  password: 123456
+  host: localhost
+  variables:
+    statement_timeout: 5000
+production:
+  adapter: postgresql
+  database: des9oa54lbpnhb
+  username: u5g88u3ou5e3bs
+  password: 123456
+  host: localhost
+  variables:
+    statement_timeout: 5000

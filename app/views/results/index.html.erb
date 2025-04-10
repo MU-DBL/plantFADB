@@ -1,0 +1,111 @@
+<% content_for :top_bar do %>
+	<h1 class="pagetitle">Data Points</h1>
+	<% if @plant %>
+		<p>
+			Filtering on plant: <b><%= link_to @plant.display_name, @plant %></b>
+		</p>
+	<% end %>
+
+	<% if @pub%>
+		<p>
+			Filtering on publication: <b><%= link_to @pub.display_name, @pub %></b>
+		</p>
+	<% end %>
+	<% if @measure%>
+		<p>
+			Filtering on <%= @measure.class %>: <b><%= link_to @measure.name||@measure.delta_notation, @measure %></b>
+		</p>
+	<% end %>
+	<% if params[:category] %>
+		<p>
+			Filtering on category: <b><%= link_to params[:category],fatty_acids_path(category: params[:category]) %></b>
+		</p>
+	<% end %>
+	<% if params[:taxon] %>
+		<p>
+			Filtering on taxon: <b><%= params[:taxon] %></b>
+		</p>
+	<% end %>
+	<% if @species %>
+		<p>
+			Filtering on: <b><%= link_to @species.name, species_page_path(genus: @species.genus, species: @species.species) %></b>
+		</p>
+	<% end %>
+  
+<% end %>
+
+<% content_for :item_bar do %>
+    <%= link_to 'Download', params.merge(format: 'csv'), class: 'btn btn-primary'%>
+<% end %>
+
+
+<%= render layout: 'shared/page_and_search', locals: {items: @results} do %>
+<br style='clear:both'/>
+	<div class='form-inline pull-right'>
+		<br/>
+		<label for="measure_type">Measure:</label>
+		<%= select_tag :measure_type, options_for_select(@measure_types, params[:measure_type]),
+			{	include_blank: true,
+				class: 'form-control',
+				onchange: 'this.form.submit()'} %>
+	</div>
+<% end %>
+
+<div class='panel table-responsive'>
+	
+	<div class="panel-heading clearfix">
+		<div class='pull-right'><%= page_entries_info @results %><br/>
+		</div>
+	</div>
+	
+  <table class='table table-striped'>
+    <thead>
+      <tr>
+				<% unless @measure %>
+	        <th><%= sortable "measures.type", "Measure" %></th>
+					<th><%= sortable "measures.name", "Name" %></th>
+	        <th><%= sortable "measures.delta_notation", "Notation" %></th>
+				<% end %>
+				<% unless @pub %>
+        	<th><%= sortable "pubs.wos_authors", "Publication" %></th>
+				<% end %>
+				<% unless @plant || @species%>
+					<th><%= sortable "plants.genus", "Plant" %></th>
+				<% end %>
+				<th></th>
+        <th><%= sortable "value" %></th>
+        <th><%= sortable "unit" %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @results.each do |result| %>
+        <tr>
+					<% unless @measure %>
+          	<td><%= result.measure.try :type %></td>
+						<td><%= result.measure.try :name %></td>
+          	<td><%= link_to_if result.measure.is_a?(FattyAcid), result.measure.try(:delta_notation), result.measure  %></td>
+					<% end %>
+					<% unless @pub %>
+            <td><%= link_to result.pub.display_name, datasets_path(plant_id: result.plant.try(:id), pub_id: result.pub.id) if result.pub %></td> 
+					<% end %>
+					<% unless @plant || @species %>
+            <td><%= link_to result.plant.display_name, datasets_path(plant_id: result.plant.id, pub_id: result.pub.try(:id)) if result.plant %></td> 
+					<% end %>
+					<td>
+            <% if (xref = result.dataset.dbxref_value) && result.dataset.dbxref %>
+              <%= result.dataset.dbxref.generate_link(xref) %>
+            <% end %>
+          </td>
+          <td><%= result.value.to_f.round(2) %></td>
+          <td><%= '*' if result.old_mol_val %> <%= result.unit %></td>         
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% unless @results.map(&:old_mol_val).compact.empty? %>
+	<div class='pull-right'>
+		<i>* Converted from mol %</i>
+	</div>
+<% end %>

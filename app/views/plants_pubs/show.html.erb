@@ -1,0 +1,26 @@
+<% content_for :title do -%>
+ PlantFAdb: <%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %> <%= "- #{@plant.common_name}" if @plant.common_name %> data
+<% end -%>
+
+<% content_for :description do -%>
+ Plant fatty acid compositions and phylogenetics. <%= @plant.genus %> <%= @plant.species %> <%= "(var. #{@plant.variety})" if @plant.variety %> <%= "- #{@plant.common_name}" if @plant.common_name %>
+<% end -%>
+
+<% content_for :top_bar do %>
+  <% unless @plants_pub.published? %>
+    <p class='bg-warning'>This is an unpublished draft. <%= link_to 'Click here to view all draft data', drafts_path %></p>
+  <% end %>
+  <%= render :partial => "header", locals: {pub: @pub, plant: @plant} %>
+<% end %>
+
+<% content_for :item_bar do %>
+  <% if can? :edit, @plants_pub %>
+    <%= link_to 'Edit', edit_plants_pub_path(@plants_pub), class: 'btn btn-primary' %>
+  <% end %>
+<% end %>
+
+<h2 class='smalltitle'>Datasets</h2>
+<% @plants_pub.datasets.each do |d|%>
+  <%= render partial: 'datasets/result_panel', locals: {dataset: d, expanded: (@plants_pub.datasets.length < 2)} %>
+<% end %>
+

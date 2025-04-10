@@ -1,0 +1,80 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <%= link_to image_tag('phylo_icon_white.png', style: 'max-height:80px;'), root_path, class: 'navbar-brand' %>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+				<%= application_top_navbar_items %>
+				<li class="<%= (params[:id] == 'resources') ? 'active' : '' %>"><%= link_to "Resources", Page.path('resources') %></li>
+				<li class="dropdown <%= 'active' if params[:id] =~ /(help)|(contact)|(about)/ %>">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						Help <span class="caret"></span>
+					</a>
+          <ul class="dropdown-menu">
+						<li><%= link_to "Tutorial", 'https://plantfadb.org/tutorial.pdf?v1' %></li>
+						<li><%= link_to "Documentation", Page.path('help') %></li>
+						<li><%= link_to "Contact Us", Page.path('contact') %></li>
+						<li role="separator" class="divider"></li>
+						<li><%= link_to "About PlantFA", Page.path('about') %></li>
+          </ul>
+				</li>
+        <% if can? :create, Draftsman::Draft %>
+          <li class='<%= 'active' if params[:controller]=~/draft/ %>'>
+            <% draft_count=Draftsman::Draft.accessible_by(current_ability).includes(:item).where(item_type: ["Pub","Plant","Measure","PlantsPub"]).count %>
+            <% count_tag = draft_count > 0 ? '<sup class="info-tag">'+draft_count.to_s+'</sup>' : '' %>
+            <%= link_to ("Data "+count_tag).html_safe, drafts_path %>
+          </li>
+        <% end %>
+				<% if user_signed_in? && current_user.is_admin? %>
+				<li class="dropdown <%= 'active' if params[:controller] == 'users' ||( params[:controller] == 'pages' && params[:action] == 'index') %>">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						Admin <span class="caret"></span>
+					</a>
+          <ul class="dropdown-menu">
+						<li><%= link_to "Manage Users", users_path %></li>
+            <li><%= link_to "Manage Tree", manage_tree_nodes_path %></li>
+						<li><%= link_to "Manage Page Content", pages_path %></li>
+            <li><%= link_to "Manage DbXref", dbxrefs_path %></li>
+            <li><%= link_to "View all Datasets", datasets_path %></li>
+            <li><%= link_to "Bulk Uploads", bulk_uploads_path %></li>
+            <li><%= link_to "Data History", history_path %></li>
+            <li><%= link_to "View Statistics", stats_path %></li>
+          </ul>
+				</li>
+				<% end %>
+      </ul>
+			<ul class="nav navbar-nav navbar-right">
+				<% if user_signed_in? %>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							<%= current_user.email %> <span class="caret"></span>
+						</a>
+	          <ul class="dropdown-menu">
+	            <li class='dropdown-header'>Signed in as <%= current_user.email %></li>
+							<li role="separator" class="divider"></li>
+							<li><%= link_to "My Account", current_user %></li>
+							<li role="separator" class="divider"></li>
+	            <li><%= link_to "Documentation", Page.path('help') %></li>
+							<li><%= link_to "Contact Us", Page.path('contact') %></li>
+							<li><%= link_to "About PlantFA", Page.path('about') %></li>
+	            <li role="separator" class="divider"></li>
+	            <li><%= link_to "Log Out", destroy_user_session_url, method: :delete %></li>
+	          </ul>
+					</li>
+				<% else %>
+				
+					<li><%= link_to "Sign In", new_user_session_path, class: "navbar-link" %></li>
+
+				<% end %>
+			</ul>
+    </div>
+  </div>
+  
+</nav>

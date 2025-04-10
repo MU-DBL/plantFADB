@@ -1,0 +1,46 @@
+<!-- Plant / Remarks form -->
+<%= form_for(@plants_pub) do |f| %>
+  <% if @plants_pub.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@plants_pub.errors.count, "error") %> prohibited this result from being saved:</h2>
+
+      <ul>
+      <% @plants_pub.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <% if @plants_pub.plant %>
+    <div class='col-md-4 pull-right btn btn-sm btn-default' data-toggle='collapse' data-target="#plant-selection-form">
+      Change Plant Selection
+    </div>
+  <% end  %>
+  <div id='plant-selection-form' class='container collapse <%= @plants_pub.plant ? '' : 'in' %>'>
+
+    <div class='col-md-6' >
+      <div class="field">
+        <%= f.label :plant %><br>
+        <%= autocomplete_field_tag :plant,'', autocomplete_plant_name_plants_path,
+              placeholder: "search plants...",
+              class: 'form-control',
+              id_element: '#plants_pub_plant_id' %>
+        <%= f.hidden_field :plant_id, value: f.object.plant_id %>
+        <%= f.hidden_field :pub_id, value: f.object.pub_id %>
+      </div>
+      <% if @plants_pub.plant %>
+        You can associate these datasets with a different plant by entering it in the field above.
+      <% end %>
+      <div class='field'></div>
+    </div>
+    
+    <div class='col-md-12' style='margin-top:1em'>
+      <div class="actions">
+        <%= f.submit class: 'btn btn-primary' %>
+      </div>
+    </div>
+    
+  </div>
+
+<% end %>

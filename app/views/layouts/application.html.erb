@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><%= content_for?(:title) ? yield(:title) : "PlantFAdb" %></title>
+	<meta name="description" content="<%= content_for?(:description) ? yield(:description) : "PlantFAdb" %>">
+	<%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= favicon_link_tag %>
+	<%= javascript_include_tag 'application'%>
+	<%= csrf_meta_tags %>
+  <!--googleoff: all-->Michigan State University<!--googleon: all-->
+</head>
+<body>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-80179868-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+	<header>
+		<%= render 'layouts/navigation' %>
+	</header>
+	<% if content_for?(:body) %>
+		<%= yield(:body) %>
+	<% end %>
+	<main role="main">
+    <% unless params[:controller]=='home' %>
+      <div class='sub-header'>
+        <div class='container'>
+          Exploring Phylogenetic Relationships between Hundreds of Plant Fatty Acids Synthesized by Thousands of Plants.
+          <%= link_to "more details ...", Page.path('about') %>
+        </div>
+      </div>
+    <% end %>
+		<%= render 'layouts/messages' %>
+		<!-- Jumbotron - primary message or actions -->
+		<% if content_for?(:jumbo) %>
+			<div class='jumbotron'>
+				<%= yield(:jumbo) %>
+			</div>
+		<% end %>
+		
+		<% if content_for?(:top_bar) || content_for?(:item_bar)%>
+		<div class='top-bar'>
+			<div class='container page-header'>
+				<% if content_for?(:item_bar) %>
+						<div class='pull-right'>
+							<%= yield(:item_bar) %>
+						</div>
+				<% end %>
+				<%= yield(:top_bar) %>
+			</div>
+		</div>
+
+		<% end %>
+		
+		<div class='container clearfix'>
+			<%= yield %>
+		</div>
+	</main>
+	
+	<%= render :partial => 'layouts/footer' %>
+
+</body>
+</html>
