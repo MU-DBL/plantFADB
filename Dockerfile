@@ -39,12 +39,15 @@ RUN curl -O https://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.2.tar.gz && \
     cd .. && rm -rf ruby-2.1.2*
 
 ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+ENV RAILS_RELATIVE_URL_ROOT=/plantfadb
+
 RUN gem install bundler -v 1.17.3
 
 WORKDIR /app
 COPY . /app
 
 RUN bundle install
+RUN rake assets:precompile
 
 # Expose port 3000 for Rails
 EXPOSE 3000
