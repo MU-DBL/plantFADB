@@ -11,4 +11,9 @@ sudo -u postgres createuser u5g88u3ou5e3bs
 sudo -u postgres psql -c "ALTER USER u5g88u3ou5e3bs WITH PASSWORD '${PGPASSWORD}';"
 sudo -u postgres psql -c "ALTER USER u5g88u3ou5e3bs CREATEDB;"
 sudo -u postgres createdb -O u5g88u3ou5e3bs des9oa54lbpnhb
+
+# Pre-create Heroku-specific role and extension so the dump restores cleanly
+sudo -u postgres psql -d des9oa54lbpnhb -c "CREATE ROLE heroku_admin;" 2>/dev/null || true
+sudo -u postgres psql -d des9oa54lbpnhb -c "CREATE EXTENSION IF NOT EXISTS pg_stat_statements;" 2>/dev/null || true
+
 psql -U u5g88u3ou5e3bs -d des9oa54lbpnhb -f /app/postgres_production-dump.sql

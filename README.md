@@ -19,5 +19,5 @@ This work was funded by the DOE Great Lakes Bioenergy Research Center (DOE BER O
 ### Docker
 
 docker build -t plantfadb .
-docker run -d -p 3000:3000 --network=host plantfadb:latest
- 
+Linux: docker run -d -p 3000:3000 --network=host plantfadb:latest
+Windows: docker run -d -p 3000:3000 plantfadb:latest

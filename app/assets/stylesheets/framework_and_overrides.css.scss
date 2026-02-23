@@ -14,6 +14,135 @@ nav.navbar {
   border-bottom: 2px solid;
 }
 
+// ── FatPlants top navigation bar ────────────────────────────────────────────
+$fatplants-green:    #5c8a20;
+$fatplants-topnav-h: 62px;
+
+.fatplants-topnav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $fatplants-topnav-h;
+  background: #ffffff;
+  border-bottom: 3px solid $fatplants-green;
+  z-index: $zindex-navbar-fixed + 1; // sit above the main navbar
+}
+
+.fatplants-topnav-inner {
+  display: flex;
+  align-items: center;
+  height: $fatplants-topnav-h;
+}
+
+.fatplants-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  margin-right: 20px;
+  flex-shrink: 0;
+
+  &:hover { text-decoration: none; }
+
+  img {
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+}
+
+.fatplants-nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  flex: 1;
+
+  li {
+    a {
+      display: block;
+      padding: 0 12px;
+      color: #333;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      line-height: $fatplants-topnav-h;
+
+      &:hover { color: $fatplants-green; }
+    }
+
+    &.active > a {
+      color: $fatplants-green;
+      font-weight: bold;
+    }
+  }
+
+  li.fatplants-dropdown {
+  position: relative;
+
+  &:hover .fatplants-dropdown-menu {
+    display: block;
+  }
+
+  .fatplants-dropdown-toggle { cursor: pointer; }
+
+  .fatplants-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: $fatplants-topnav-h;
+    left: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: 2px solid $fatplants-green;
+    min-width: 160px;
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+    z-index: 1100;
+    box-shadow: 0 4px 8px rgba(0,0,0,.1);
+
+    li a {
+      display: block;
+      padding: 6px 16px;
+      line-height: normal;
+      color: #333;
+      white-space: nowrap;
+
+      &:hover {
+        background: #f5f5f5;
+        color: $fatplants-green;
+      }
+    }
+  }
+}
+}
+
+.fatplants-stats-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: $fatplants-green;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  flex-shrink: 0;
+
+  .glyphicon { font-size: 16px; }
+
+  &:hover {
+    background: darken($fatplants-green, 10%);
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+// ── Push existing fixed elements down to make room for the top bar ───────────
+.navbar.navbar-fixed-top {
+  top: $fatplants-topnav-h;
+}
+
 //.main-image {
 //  position:relative;
 //  width: 100%;
@@ -69,7 +198,7 @@ nav.navbar {
 
 main {
   @extend .container;
-  padding-top: 95px;
+  padding-top: 157px; // 95px original + 62px for top nav bar
   padding-bottom: 50px;
   width: 100%;
   min-height: 600px;
@@ -77,7 +206,7 @@ main {
 
 .sub-header {
   position: fixed;
-  top: 75px;
+  top: 137px; // 75px navbar bottom + 62px top nav bar
   left: 0;
   width: 100%;
   font-size: $font-size-base;
@@ -132,7 +261,7 @@ section {
 
 .alert {
   position: fixed;
-  top: 80px;
+  top: 142px; // 80px original + 62px top nav bar
   width: 95%;
   z-index: 1010;
 }

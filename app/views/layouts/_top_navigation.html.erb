@@ -1,0 +1,32 @@
+<nav class="fatplants-topnav">
+  <div class="container">
+    <div class="fatplants-topnav-inner">
+
+      <%# Logo brand - replace image_tag below with your icon when ready %>
+      <a href="#" class="fatplants-brand">
+        <%# Icon placeholder: replace '#' href and add image_tag or SVG here %>
+        <%= image_tag 'fatplants.png', style: 'max-height:40px;', alt: 'FatPlants' %>
+      </a>
+
+      <%# Primary links %>
+      <ul class="fatplants-nav-links">
+        <li><a href="/home">Home</a></li>
+        <li><a href="/datasets/arabidopsis">Datasets</a></li>
+        <li class="fatplants-dropdown">
+          <a href="#" class="fatplants-dropdown-toggle">Tools <span class="caret"></span></a>
+          <ul class="fatplants-dropdown-menu">
+            <li><a href="/go-network-page">Arabidopsis GO Network</a></li>
+            <li><a href="/blast-page">Blast</a></li>
+            <li><a href="/glmol-page">3D Structure</a></li>
+            <li><a href="/pathway-viewer-page">Pathway Viewer</a></li>
+            <li><a href="/download">Data Download</a></li>
+          </ul>
+        </li>
+        <li><a href="/aralip-menu/pathways">ARALIP</a></li>
+        <li><a href="/plmn-pathways">PLMN</a></li>
+        <li class="active"><a href="/plantfadb">PlantFADB</a></li>
+        <li><a href="/lipidbot">LipidBot</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
