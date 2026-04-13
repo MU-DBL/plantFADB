@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  plantfadb-db:
+    image: postgres:9.6
+    container_name: plantfadb-db
+    environment:
+      POSTGRES_USER: u5g88u3ou5e3bs
+      POSTGRES_PASSWORD: '123456'
+      POSTGRES_DB: des9oa54lbpnhb
+    volumes:
+      # Persist database data across restarts
+      - plantfadb_postgres_data:/var/lib/postgresql/data
+      # Import SQL dump ONLY on first initialization
+      - ./postgres_production-dump.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U u5g88u3ou5e3bs -d des9oa54lbpnhb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PlantFADB Rails Application
+  plantfadb-web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: plantfadb-web
+    depends_on:
+      plantfadb-db:
+        condition: service_healthy
+    environment:
+      DATABASE_HOST: plantfadb-db
+      DATABASE_NAME: des9oa54lbpnhb
+      DATABASE_USER: u5g88u3ou5e3bs
+      DATABASE_PASSWORD: '123456'
+      DATABASE_PORT: 5432
+      RAILS_ENV: production
+      RAILS_RELATIVE_URL_ROOT: /plantfadb
+    ports:
+      - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 512M
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+volumes:
+  plantfadb_postgres_data:
+    driver: local
